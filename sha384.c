@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "sha512.h"
+#include "sha384.h"
 
 typedef uint64_t word_t;
 
@@ -44,7 +44,7 @@ static const word_t constants[TURNS] = {
 	0x431d67c49c100d4c, 0x4cc5d4becb3e42b6, 0x597f299cfc657e2a, 0x5fcb6fab3ad6faec, 0x6c44198c4a475817
 };
 
-static void sha512_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
+static void sha384_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
 	word_t a, b, c, d, e, f, g, h, t1, t2, m[TURNS];
 	unsigned int i, j, k;
 
@@ -90,12 +90,12 @@ static void sha512_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
 	state[7] += h;
 }
 
-void sha512(const uint8_t data[], const size_t size, uint8_t hash[SHA512_HASH_SIZE]) {
+void sha384(const uint8_t data[], const size_t size, uint8_t hash[SHA384_HASH_SIZE]) {
 	word_t datalength = 0;
 	uint64_t bitlength = 0;
 	word_t state[8] = {
-		0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
-		0x510e527fade682d1, 0x9b05688c2b3e6c1f, 0x1f83d9abfb41bd6b, 0x5be0cd19137e2179
+		0xcbbb9d5dc1059ed8, 0x629a292a367cd507, 0x9159015a3070dd17, 0x152fecd8f70e5939,
+		0x67332667ffc00b31, 0x8eb44a8768581511, 0xdb0c2e0d64f98fa7, 0x47b5481dbefa4fa4
 	};
 	word_t res[BLOCK_SIZE];
 	unsigned int i, j;
@@ -105,7 +105,7 @@ void sha512(const uint8_t data[], const size_t size, uint8_t hash[SHA512_HASH_SI
 		res[datalength] = data[i];
 		datalength++;
 		if (datalength == BLOCK_SIZE) {
-			sha512_compress(res, state);
+			sha384_compress(res, state);
 			bitlength += BLOCK_SIZE_BITS;
 			datalength = 0;
 		}
@@ -124,7 +124,7 @@ void sha512(const uint8_t data[], const size_t size, uint8_t hash[SHA512_HASH_SI
 		while (i < BLOCK_SIZE) {
 			res[i++] = 0;
 		}
-		sha512_compress(res, state);
+		sha384_compress(res, state);
 		memset(res, 0, BLOCK_SIZE - 8);
 	}
 
@@ -133,19 +133,19 @@ void sha512(const uint8_t data[], const size_t size, uint8_t hash[SHA512_HASH_SI
 	for (i = 0; i < 8; i++) {
 		res[BLOCK_SIZE - 1 - i] = bitlength >> (i * 8);
 	}
-	sha512_compress(res, state);
+	sha384_compress(res, state);
 
 	//convert
 	for (i = 0; i < WORD_SIZE; i++) {
-		for (j = 0; j < SHA512_HASH_SIZE / WORD_SIZE; j++) {
+		for (j = 0; j < SHA384_HASH_SIZE / WORD_SIZE; j++) {
 			hash[i + WORD_SIZE * j] = state[j] >> (WORD_SIZE_BITS - 8 - i * 8);
 		}
 	}
 }
 
-void sha512_hash_to_str(const uint8_t hash[SHA512_HASH_SIZE], char dest[SHA512_STRING_HASH_SIZE]) {
+void sha384_hash_to_str(const uint8_t hash[SHA384_HASH_SIZE], char dest[SHA384_STRING_HASH_SIZE]) {
 	int i;
-	for (i = 0; i < SHA512_HASH_SIZE; i++) {
+	for (i = 0; i < SHA384_HASH_SIZE; i++) {
 		sprintf(dest + i * 2, "%.2x", hash[i]);
 	}
 }

@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "sha256.h"
+#include "sha384.h"
 #include "sha512.h"
 
 void test_sha256() {
@@ -25,6 +26,28 @@ void test_sha256() {
 	for (i = 0; i < 4; i++) {
 		sha256((uint8_t *) tests[i], strlen(tests[i]), hash);
 		sha256_hash_to_str(hash, string);
+		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
+	}
+	puts("\nTest done.\n");
+}
+
+void test_sha384() {
+	const char * tests[4] = {
+		"", "A", "0123456789", "abcdefghijklmnopqrstuvwxyz"
+	};
+	const char * oks[4] = {
+		"38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+		"ad14aaf25020bef2fd4e3eb5ec0c50272cdfd66074b0ed037c9a11254321aac0729985374beeaa5b80a504d048be1864",
+		"90ae531f24e48697904a4d0286f354c50a350ebb6c2b9efcb22f71c96ceaeffc11c6095e9ca0df0ec30bf685dcf2e5e5",
+		"feb67349df3db6f5924815d6c3dc133f091809213731fe5c7b5f4999e463479ff2877f5f2936fa63bb43784b12f3ebb4"
+	};
+	uint8_t hash[SHA384_HASH_SIZE];
+	char string[SHA384_STRING_HASH_SIZE];
+	int i;
+	puts("\nTesting SHA384...\n");
+	for (i = 0; i < 4; i++) {
+		sha384((uint8_t *) tests[i], strlen(tests[i]), hash);
+		sha384_hash_to_str(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -54,6 +77,7 @@ void test_sha512() {
 
 int main() {
 	test_sha256();
+	test_sha384();
 	test_sha512();
 	exit(0);
 }

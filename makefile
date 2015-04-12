@@ -12,11 +12,14 @@ endif
 
 all: $(LIBNAME)
 
-$(LIBNAME): sha256.o sha512.o
-	$(COMPILER) $(ARGS) -shared -Wl,-soname,$(LIBNAME) -o $(LIBNAME) sha256.o sha512.o
+$(LIBNAME): sha256.o sha384.o sha512.o
+	$(COMPILER) $(ARGS) -shared -Wl,-soname,$(LIBNAME) -o $(LIBNAME) sha256.o sha384.o sha512.o
 
 sha256.o: sha256.c
 	$(COMPILER) $(ARGS) -c -fPIC sha256.c
+
+sha384.o: sha384.c
+	$(COMPILER) $(ARGS) -c -fPIC sha384.c
 
 sha512.o: sha512.c
 	$(COMPILER) $(ARGS) -c -fPIC sha512.c

@@ -128,7 +128,7 @@ void sha256(const uint8_t data[], const size_t size, uint8_t hash[SHA256_HASH_SI
 
 	//convert
 	for (i = 0; i < WORD_SIZE; i++) {
-		for (j = 0; j < 8; j++) {
+		for (j = 0; j < SHA256_HASH_SIZE / WORD_SIZE; j++) {
 			hash[i + WORD_SIZE * j] = state[j] >> (WORD_SIZE_BITS - 8 - i * 8);
 		}
 	}
