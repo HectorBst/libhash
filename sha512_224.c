@@ -45,12 +45,18 @@ static const word_t constants[TURNS] = {
 };
 
 static void sha512_224_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
-	word_t a, b, c, d, e, f, g, h, t1, t2, m[TURNS];
+	word_t a, b, c, d, e, f, g, h, t1, t2;
+	word_t m[TURNS] = {
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	};
 	unsigned int i, j, k;
 
 	for (i = 0, j = 0; i < 16; i++, j += WORD_SIZE) {
-		m[i] = res[j] << (WORD_SIZE_BITS - 8);
-		for (k = 1; k < WORD_SIZE; k++) {
+		for (k = 0; k < WORD_SIZE; k++) {
 			m[i] |= (res[j + k] << (WORD_SIZE_BITS - 8 - k * 8));
 		}
 	}
