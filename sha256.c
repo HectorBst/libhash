@@ -12,19 +12,20 @@ typedef uint32_t word_t;
 #define WORD_SIZE_BITS (WORD_SIZE * 8)
 #define BLOCK_SIZE (WORD_SIZE * 16)
 #define BLOCK_SIZE_BITS (BLOCK_SIZE * 8)
+
 #define TURNS 64
 
 #define SHR(a,b) ((a) >> (b))
 #define ROTR(a,b) (((a) >> (b)) | ((a) << (WORD_SIZE_BITS-(b))))
-
 #define CH(x,y,z) (((x) & (y)) ^ (~(x) & (z)))
 #define MAJ(x,y,z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
+
 #define EP0(x) (ROTR(x,2) ^ ROTR(x,13) ^ ROTR(x,22))
 #define EP1(x) (ROTR(x,6) ^ ROTR(x,11) ^ ROTR(x,25))
-#define SIG0(x) (ROTR(x,7) ^ ROTR(x,18) ^ SHR(x, 3))
-#define SIG1(x) (ROTR(x,17) ^ ROTR(x,19) ^ SHR(x, 10))
+#define SIG0(x) (ROTR(x,7) ^ ROTR(x,18) ^ SHR(x,3))
+#define SIG1(x) (ROTR(x,17) ^ ROTR(x,19) ^ SHR(x,10))
 
-static const word_t constants[64] = {
+static const word_t constants[TURNS] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
 	0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -45,7 +46,7 @@ static void sha256_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
 			m[i] |= (res[j + k] << (WORD_SIZE_BITS - 8 - k * 8));
 		}
 	}
-	for (; i < BLOCK_SIZE; i++) {
+	for (; i < TURNS; i++) {
 		m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
 	}
 
