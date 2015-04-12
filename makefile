@@ -12,8 +12,8 @@ endif
 
 all: $(LIBNAME)
 
-$(LIBNAME): sha224.o sha256.o sha384.o sha512.o
-	$(COMPILER) $(ARGS) -shared -Wl,-soname,$(LIBNAME) -o $(LIBNAME) sha224.o sha256.o sha384.o sha512.o
+$(LIBNAME): sha224.o sha256.o sha384.o sha512.o sha512_224.o sha512_256.o
+	$(COMPILER) $(ARGS) -shared -Wl,-soname,$(LIBNAME) -o $(LIBNAME) sha224.o sha256.o sha384.o sha512.o sha512_224.o sha512_256.o
 
 sha224.o: sha224.c
 	$(COMPILER) $(ARGS) -c -fPIC sha224.c
@@ -26,6 +26,12 @@ sha384.o: sha384.c
 
 sha512.o: sha512.c
 	$(COMPILER) $(ARGS) -c -fPIC sha512.c
+
+sha512_224.o: sha512_224.c
+	$(COMPILER) $(ARGS) -c -fPIC sha512_224.c
+
+sha512_256.o: sha512_256.c
+	$(COMPILER) $(ARGS) -c -fPIC sha512_256.c
 
 clean:
 	rm -f *.o $(LIBNAME) $(TESTNAME)

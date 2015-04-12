@@ -9,6 +9,8 @@
 #include "sha256.h"
 #include "sha384.h"
 #include "sha512.h"
+#include "sha512_224.h"
+#include "sha512_256.h"
 
 void test_sha224() {
 	const char * tests[4] = {
@@ -98,10 +100,56 @@ void test_sha512() {
 	puts("\nTest done.\n");
 }
 
+void test_sha512_224() {
+	const char * tests[4] = {
+		"", "A", "0123456789", "abcdefghijklmnopqrstuvwxyz"
+	};
+	const char * oks[4] = {
+		"6ed0dd02806fa89e25de060c19d3ac86cabb87d6a0ddd05c333b84f4",
+		"1def1e6a5344538a07a3c93a3a765fa1d2859a576947791a9047c3e6",
+		"8e4c8d3d5aa0f2d55f50ca6e4eb53bd602309e43ef171a1862207f27",
+		"ff83148aa07ec30655c1b40aff86141c0215fe2a54f767d3f38743d8"
+	};
+	uint8_t hash[SHA512_224_HASH_SIZE];
+	char string[SHA512_224_STRING_HASH_SIZE];
+	int i;
+	puts("\n\nTesting SHA512/224...\n");
+	for (i = 0; i < 4; i++) {
+		sha512_224((uint8_t *) tests[i], strlen(tests[i]), hash);
+		sha512_224_hash_to_str(hash, string);
+		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
+	}
+	puts("\nTest done.\n");
+}
+
+void test_sha512_256() {
+	const char * tests[4] = {
+		"", "A", "0123456789", "abcdefghijklmnopqrstuvwxyz"
+	};
+	const char * oks[4] = {
+		"c672b8d1ef56ed28ab87c3622c5114069bdd3ad7b8f9737498d0c01ecef0967a",
+		"65a992ad19967492b5780d76a4733af553f796f688b79102d01ec7fde5590cab",
+		"d48b2aa4a50d1c3e324a1a762d3b2165244661ef80e004dd3669a77e02c489d8",
+		"fc3189443f9c268f626aea08a756abe7b726b05f701cb08222312ccfd6710a26"
+	};
+	uint8_t hash[SHA512_256_HASH_SIZE];
+	char string[SHA512_256_STRING_HASH_SIZE];
+	int i;
+	puts("\n\nTesting SHA512/256...\n");
+	for (i = 0; i < 4; i++) {
+		sha512_256((uint8_t *) tests[i], strlen(tests[i]), hash);
+		sha512_256_hash_to_str(hash, string);
+		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
+	}
+	puts("\nTest done.\n");
+}
+
 int main() {
 	test_sha224();
 	test_sha256();
 	test_sha384();
 	test_sha512();
+	test_sha512_224();
+	test_sha512_256();
 	exit(0);
 }
