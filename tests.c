@@ -27,8 +27,8 @@ void test_sha224() {
 	int i;
 	puts("\n\nTesting SHA224...\n");
 	for (i = 0; i < 4; i++) {
-		sha224((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha224_hash_to_str(hash, string);
+		sha224(tests[i], strlen(tests[i]), hash);
+		sha224_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -49,8 +49,8 @@ void test_sha256() {
 	int i;
 	puts("\n\nTesting SHA256...\n");
 	for (i = 0; i < 4; i++) {
-		sha256((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha256_hash_to_str(hash, string);
+		sha256(tests[i], strlen(tests[i]), hash);
+		sha256_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -71,8 +71,8 @@ void test_sha384() {
 	int i;
 	puts("\n\nTesting SHA384...\n");
 	for (i = 0; i < 4; i++) {
-		sha384((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha384_hash_to_str(hash, string);
+		sha384(tests[i], strlen(tests[i]), hash);
+		sha384_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -93,8 +93,8 @@ void test_sha512() {
 	int i;
 	puts("\n\nTesting SHA512...\n");
 	for (i = 0; i < 4; i++) {
-		sha512((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha512_hash_to_str(hash, string);
+		sha512(tests[i], strlen(tests[i]), hash);
+		sha512_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -115,8 +115,8 @@ void test_sha512_224() {
 	int i;
 	puts("\n\nTesting SHA512/224...\n");
 	for (i = 0; i < 4; i++) {
-		sha512_224((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha512_224_hash_to_str(hash, string);
+		sha512_224(tests[i], strlen(tests[i]), hash);
+		sha512_224_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
@@ -137,8 +137,8 @@ void test_sha512_256() {
 	int i;
 	puts("\n\nTesting SHA512/256...\n");
 	for (i = 0; i < 4; i++) {
-		sha512_256((uint8_t *) tests[i], strlen(tests[i]), hash);
-		sha512_256_hash_to_str(hash, string);
+		sha512_256(tests[i], strlen(tests[i]), hash);
+		sha512_256_hash_to_string(hash, string);
 		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
 	}
 	puts("\nTest done.\n");
