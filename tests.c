@@ -5,12 +5,35 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sha1.h"
 #include "sha224.h"
 #include "sha256.h"
 #include "sha384.h"
 #include "sha512.h"
 #include "sha512_224.h"
 #include "sha512_256.h"
+
+void test_sha1() {
+	const char * tests[4] = {
+		"", "A", "0123456789", "abcdefghijklmnopqrstuvwxyz"
+	};
+	const char * oks[4] = {
+		"da39a3ee5e6b4b0d3255bfef95601890afd80709",
+		"6dcd4ce23d88e2ee9568ba546c007c63d9131c1b",
+		"87acec17cd9dcd20a716cc2cf67417b71c8a7016",
+		"32d10c7b8cf96570ca04ce37f2a19d84240d3a89"
+	};
+	uint8_t hash[SHA1_HASH_SIZE];
+	char string[SHA1_STRING_HASH_SIZE];
+	int i;
+	puts("\n\nTesting SHA1...\n");
+	for (i = 0; i < 4; i++) {
+		sha1(tests[i], strlen(tests[i]), hash);
+		sha1_hash_to_string(hash, string);
+		printf("%s\n%s\n--> %s\n\n", tests[i], string, strcmp(string, oks[i]) == 0 ? "OK" : "FAIL");
+	}
+	puts("\nTest done.\n");
+}
 
 void test_sha224() {
 	const char * tests[4] = {
@@ -145,6 +168,7 @@ void test_sha512_256() {
 }
 
 int main() {
+	test_sha1();
 	test_sha224();
 	test_sha256();
 	test_sha384();

@@ -20,7 +20,7 @@
 #define SIG0(x) (ROTR(x,1) ^ ROTR(x,8) ^ SHR(x,7))
 #define SIG1(x) (ROTR(x,19) ^ ROTR(x,61) ^ SHR(x,6))
 
-static const word_t constants[TURNS] = {
+static const word_t SHA512_CONSTANTS[TURNS] = {
 	0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc, 0x3956c25bf348b538,
 	0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118, 0xd807aa98a3030242, 0x12835b0145706fbe,
 	0x243185be4ee4b28c, 0x550c7dc3d5ffb4e2, 0x72be5d74f27b896f, 0x80deb1fe3b1696b1, 0x9bdc06a725c71235,
@@ -69,7 +69,7 @@ void sha512_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
 	h = state[7];
 
 	for (i = 0; i < TURNS; i++) {
-		t1 = h + EP1(e) + CH(e, f, g) + constants[i] + m[i];
+		t1 = h + EP1(e) + CH(e, f, g) + SHA512_CONSTANTS[i] + m[i];
 		t2 = EP0(a) + MAJ(a, b, c);
 		h = g;
 		g = f;
@@ -94,15 +94,15 @@ void sha512_compress(word_t res[BLOCK_SIZE], word_t state[8]) {
 void sha512_compute(const uint8_t data[], const size_t size, word_t state[8]) {
 	word_t datalength = 0;
 	uint64_t bitlength = 0;
-	word_t res[BLOCK_SIZE];
+	word_t result[BLOCK_SIZE];
 	unsigned int i;
 
 	//compressing
 	for (i = 0; i < size; i++) {
-		res[datalength] = data[i];
+		result[datalength] = data[i];
 		datalength++;
 		if (datalength == BLOCK_SIZE) {
-			sha512_compress(res, state);
+			sha512_compress(result, state);
 			bitlength += BLOCK_SIZE_BITS;
 			datalength = 0;
 		}
@@ -112,23 +112,23 @@ void sha512_compute(const uint8_t data[], const size_t size, word_t state[8]) {
 
 	//padding
 	if (datalength < BLOCK_SIZE - 8) {
-		res[i++] = 0x80;
+		result[i++] = 0x80;
 		while (i < BLOCK_SIZE - 8) {
-			res[i++] = 0;
+			result[i++] = 0;
 		}
 	} else {
-		res[i++] = 0x80;
+		result[i++] = 0x80;
 		while (i < BLOCK_SIZE) {
-			res[i++] = 0;
+			result[i++] = 0;
 		}
-		sha512_compress(res, state);
-		memset(res, 0, BLOCK_SIZE - 8);
+		sha512_compress(result, state);
+		memset(result, 0, BLOCK_SIZE - 8);
 	}
 
 	//append
 	bitlength += datalength * 8;
 	for (i = 0; i < 8; i++) {
-		res[BLOCK_SIZE - 1 - i] = bitlength >> (i * 8);
+		result[BLOCK_SIZE - 1 - i] = bitlength >> (i * 8);
 	}
-	sha512_compress(res, state);
+	sha512_compress(result, state);
 }
